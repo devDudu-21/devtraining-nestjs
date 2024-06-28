@@ -107,4 +107,17 @@ describe('CoursesService unit tests', () => {
     expect(mockCourseRepository.save).toHaveBeenCalled();
     expect(expectOutputCourses).toStrictEqual(course);
   });
+
+  it('should remove a course', async () => {
+    //@ts-expect-error defined part of methods
+    service['courseRepository'] = mockCourseRepository;
+    //@ts-expect-error defined part of methods
+    service['tagRepository'] = mockTagRepository;
+
+    const course = await service.remove(id);
+
+    expect(mockCourseRepository.findOne).toHaveBeenCalled();
+    expect(mockCourseRepository.remove).toHaveBeenCalled();
+    expect(expectOutputCourses).toStrictEqual(course);
+  });
 });
