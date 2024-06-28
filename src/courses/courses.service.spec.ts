@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { CoursesService } from './courses.service';
+import { CreateCourseDTO } from './dto/create-course.dto';
 
 describe('CoursesService unit tests', () => {
   let service: CoursesService;
@@ -25,7 +26,7 @@ describe('CoursesService unit tests', () => {
     };
 
     mockCourseRepository = {
-      created: jest.fn().mockReturnValue(Promise.resolve(expectOutputCourses)),
+      create: jest.fn().mockReturnValue(Promise.resolve(expectOutputCourses)),
       save: jest.fn().mockReturnValue(Promise.resolve(expectOutputCourses)),
       update: jest.fn().mockReturnValue(Promise.resolve(expectOutputCourses)),
       preload: jest.fn().mockReturnValue(Promise.resolve(expectOutputCourses)),
@@ -43,5 +44,23 @@ describe('CoursesService unit tests', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+  });
+
+  it('should create a course', async () => {
+    //@ts-expect-error defined part of methods
+    service['courseRepository'] = mockCourseRepository;
+    //@ts-expect-error defined part of methods
+    service['tagRepository'] = mockTagRepository;
+
+    const createCourseDTO: CreateCourseDTO = {
+      name: 'Test',
+      description: 'Test description',
+      tags: ['nestjs'],
+    };
+
+    const newCourse = await service.create(createCourseDTO);
+
+    expect(mockCourseRepository.save).toHaveBeenCalled();
+    expect(expectOutputCourses).toStrictEqual(newCourse);
   });
 });
