@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import * as chalk from 'chalk';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 
@@ -12,7 +13,9 @@ async function bootstrap() {
     }),
   );
   await app.listen(3000, () => {
-    console.log(`🚀 Running at http://localhost:3000`);
+    console.log(
+      chalk.bgGreen.black.bold('🚀 Server is running at http://localhost:3000'),
+    );
   });
 }
 bootstrap();
