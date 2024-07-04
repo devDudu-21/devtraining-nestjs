@@ -107,4 +107,25 @@ describe('CoursesController e2e', () => {
       expect(res.body.description).toEqual(courses[0].description);
     });
   });
+
+  describe('PUT /courses:id', () => {
+    it('should update a course', async () => {
+      const updateData = {
+        name: 'new name',
+        description: 'new description',
+        tags: ['newTag1', 'newTag2'],
+      };
+      const res = await request(app.getHttpServer())
+        .put(`/courses/${courses[0].id}`)
+        .send(updateData)
+        .expect(200);
+
+      expect(res.body.id).toEqual(courses[0].id);
+      expect(res.body.name).toEqual(updateData.name);
+      expect(res.body.description).toEqual(updateData.description);
+      expect(res.body.tags).toHaveLength(2);
+      expect(res.body.tags[0].name).toEqual(updateData.tags[0]);
+      expect(res.body.tags[1].name).toEqual(updateData.tags[1]);
+    });
+  });
 });
