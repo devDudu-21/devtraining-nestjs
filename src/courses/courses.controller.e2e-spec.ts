@@ -73,4 +73,38 @@ describe('CoursesController e2e', () => {
       expect(res.body.tags[1].name).toEqual(data.tags[1]);
     });
   });
+
+  describe('GET /courses', () => {
+    it('should list all courses', async () => {
+      const res = await request(app.getHttpServer())
+        .get('/courses')
+        .expect(200);
+
+      expect(res.body[0].id).toBeDefined();
+      expect(res.body[0].name).toEqual(data.name);
+      expect(res.body[0].description).toEqual(data.description);
+      expect(res.body[0].created_at).toBeDefined();
+      res.body.map((course) =>
+        expect(course).toEqual({
+          id: course.id,
+          name: course.name,
+          description: course.description,
+          created_at: course.created_at,
+          tags: [...course.tags],
+        }),
+      );
+    });
+  });
+
+  describe('GET /courses:id', () => {
+    it('should gets a course by id', async () => {
+      const res = await request(app.getHttpServer())
+        .get(`/courses/${courses[0].id}`)
+        .expect(200);
+
+      expect(res.body.id).toEqual(courses[0].id);
+      expect(res.body.name).toEqual(courses[0].name);
+      expect(res.body.description).toEqual(courses[0].description);
+    });
+  });
 });
